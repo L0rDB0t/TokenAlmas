@@ -1,0 +1,28 @@
+body {
+    font-family: sans-serif;
+    background: #121212;
+    color: white;
+    text-align: center;
+    padding: 2em;
+  }
+  
+  button {
+    padding: 1em 2em;
+    margin: 1em;
+    font-size: 1em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #6c5ce7;
+    color: white;
+  }
+  
+  button:disabled {
+    background: gray;
+  }
+  
+  #status {
+    margin-top: 1em;
+    font-weight: bold;
+  }
+  

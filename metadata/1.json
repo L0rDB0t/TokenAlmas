@@ -1,0 +1,16 @@
+{
+    "name": "LordDev Token",
+    "description": "Token SFT exclusivo para desarrolladores",
+    "image": "https://L0rDB0t.github.io/lorddev-sft-dapp/images/lorddev.png",
+    "attributes": [
+      {
+        "trait_type": "Rareza",
+        "value": "Legendario"
+      },
+      {
+        "trait_type": "Acceso",
+        "value": "Exclusivo"
+      }
+    ]
+  }
+  
