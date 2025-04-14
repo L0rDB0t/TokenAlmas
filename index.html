@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Reclama tu Almas</title>
+  <title>Token Almas SFT</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <main>
-      <h1> Reclama Almas</h1>
-      <p>Conéctate con Metamask y reclama tu SFT exclusivo en Sepolia Testnet.</p>
+      <h1>Token Almas SFT</h1>
+      <p>Conéctate con Metamask para gestionar tus tokens en Sepolia Testnet.</p>
       <button id="connectButton">🔌 Conectar Wallet</button>
-      <button id="claimButton" disabled>🎁 Reclamar Token</button>
+      <div id="tokenInterface" style="display:none;">
+        <button id="mintButton">🆕 Mintear Token</button>
+        <button id="viewTokens">👀 Ver Mis Tokens</button>
+      </div>
       <p id="status"></p>
+      <div id="tokensContainer"></div>
     </main>
     <img src="imagenes/lorddev.jpg" alt="Ojos" id="cornerImage" />
-    </body>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
 </html>

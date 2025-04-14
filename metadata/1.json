@@ -1,16 +1,19 @@
 {
-    "name": "LordDev Token",
-    "description": "Token SFT exclusivo para desarrolladores",
-    "image": "https://L0rDB0t.github.io/lorddev-sft-dapp/images/lorddev.png",
-    "attributes": [
+  "name": "Token Almas",
+  "description": "Token SFT exclusivo de Almas en la blockchain",
+  "image": "https://l0rdb0t.github.io/TokenAlmas/images/lorddev.jpg",
+  "attributes": [
       {
-        "trait_type": "Rareza",
-        "value": "Legendario"
+          "trait_type": "Tipo",
+          "value": "Alma Digital"
       },
       {
-        "trait_type": "Acceso",
-        "value": "Exclusivo"
+          "trait_type": "Blockchain",
+          "value": "Ethereum"
+      },
+      {
+          "trait_type": "Red",
+          "value": "Sepolia Testnet"
       }
-    ]
-  }
-  
+  ]
+}
