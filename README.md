@@ -50,10 +50,9 @@ Edit
 
 ## 📦 Deployment
 
-El proyecto está desplegado en GitHub Pages:
+El proyecto está desplegado en Vercel Pages:
 
-https://github.com/L0rDB0t/TokenAlmas.git
-
+https://token-almas-3wchpgfkn-l0rdb0ts-projects.vercel.app/
 yaml
 Copy
 Edit
