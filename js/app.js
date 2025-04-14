@@ -1,13 +1,8 @@
-// Configuración para Vercel
-const CONFIG = {
-  contractAddress: "0x20ae870f101b578917fec53d4e98ef0abe0df6fc",
-  tokenId: 1,
-  tokenURI: "/1.json",
-  chainId: 11155111, // Sepolia
-  tokenImage: "imagenes/lorddev.jpg"
-};
+// Configuración del contrato
+const CONTRACT_ADDRESS = "0x20ae870f101b578917fec53d4e98ef0abe0df6fc";
+const TOKEN_URI = "https://token-almas-1gae570ha-l0rdb0ts-projects.vercel.app/1.json";
 
-// ABI del contrato
+// ABI simplificado para las funciones que necesitamos
 const ABI = [
   {
     "inputs": [
@@ -33,136 +28,147 @@ const ABI = [
   }
 ];
 
+// Variables globales
 let provider, signer, contract;
 
-// Inicialización
+// Al cargar la página
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById("connectButton").onclick = connectWallet;
-  
-  // Verificar si ya está conectado
-  if(window.ethereum && window.ethereum.selectedAddress) {
-    connectWallet();
+  // Verificar si MetaMask está instalado
+  if (!window.ethereum) {
+    document.getElementById('status').innerText = "⚠️ Por favor instala MetaMask";
+    document.getElementById('connectButton').disabled = true;
+    return;
   }
+
+  // Configurar eventos de los botones
+  document.getElementById('connectButton').onclick = connectWallet;
+  document.getElementById('claimButton').onclick = mintToken;
 });
 
+// Función para conectar wallet
 async function connectWallet() {
-  if (!window.ethereum) {
-    return alert("Por favor instala MetaMask!");
-  }
-
   try {
-    // Solicitar conexión
-    const accounts = await window.ethereum.request({ 
-      method: "eth_requestAccounts" 
-    });
+    document.getElementById('status').innerText = "⏳ Conectando...";
     
+    // Solicitar conexión de cuentas
+    await window.ethereum.request({ method: "eth_requestAccounts" });
     provider = new ethers.providers.Web3Provider(window.ethereum);
     signer = provider.getSigner();
     
-    // Verificar red
+    // Verificar que estamos en Sepolia (chainId 11155111)
     const network = await provider.getNetwork();
-    if(network.chainId !== CONFIG.chainId) {
-      await switchNetwork();
+    if (network.chainId !== 11155111) {
+      await switchToSepolia();
       return;
     }
     
     // Inicializar contrato
-    contract = new ethers.Contract(CONFIG.contractAddress, ABI, signer);
+    contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
     
     // Actualizar UI
-    document.getElementById("walletStatus").textContent = 
-      `Conectado: ${accounts[0].substring(0, 6)}...${accounts[0].substring(38)}`;
-    document.getElementById("tokenSection").style.display = "block";
-    document.getElementById("connectButton").textContent = "✅ Wallet Conectada";
+    document.getElementById('status').innerHTML = `
+      <span class="text-success">✅ Wallet conectada</span>
+      <small class="d-block">${(await signer.getAddress()).substring(0, 6)}...${(await signer.getAddress()).substring(38)}</small>
+    `;
+    document.getElementById('claimButton').disabled = false;
+    document.getElementById('connectButton').textContent = "✅ Conectado";
+    document.getElementById('connectButton').classList.add('btn-success');
     
-    // Configurar eventos
-    document.getElementById("mintButton").onclick = mintToken;
-    document.getElementById("checkBalance").onclick = checkBalance;
+    // Mostrar información de tokens
+    await showTokenInfo();
     
-    // Verificar balance inicial
-    await checkBalance();
-    
-  } catch(error) {
-    console.error("Error:", error);
-    document.getElementById("walletStatus").textContent = 
-      `Error: ${error.message}`;
+  } catch (error) {
+    console.error("Error conectando wallet:", error);
+    document.getElementById('status').innerHTML = `
+      <span class="text-danger">❌ Error de conexión</span>
+      <small class="d-block">${error.message}</small>
+    `;
   }
 }
 
-async function switchNetwork() {
+// Función para cambiar a Sepolia
+async function switchToSepolia() {
   try {
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: `0x${CONFIG.chainId.toString(16)}` }]
+      params: [{ chainId: "0xaa36a7" }] // ChainId de Sepolia
     });
-  } catch(error) {
-    console.error("Error cambiando de red:", error);
-    alert(`Por favor cambia a Sepolia Testnet (ChainID: ${CONFIG.chainId})`);
+  } catch (error) {
+    // Si la red no está añadida, la añadimos
+    if (error.code === 4902) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [{
+            chainId: "0xaa36a7",
+            chainName: "Sepolia Test Network",
+            nativeCurrency: {
+              name: "Sepolia ETH",
+              symbol: "ETH",
+              decimals: 18
+            },
+            rpcUrls: ["https://rpc.sepolia.org"],
+            blockExplorerUrls: ["https://sepolia.etherscan.io"]
+          }]
+        });
+      } catch (addError) {
+        console.error("Error añadiendo Sepolia:", addError);
+      }
+    }
+    console.error("Error cambiando a Sepolia:", error);
   }
 }
 
+// Función para mintear tokens (usando el botón "Reclamar Token")
 async function mintToken() {
-  const button = document.getElementById("mintButton");
   try {
-    button.disabled = true;
-    button.textContent = "⏳ Minteando...";
+    const claimButton = document.getElementById('claimButton');
+    claimButton.disabled = true;
+    document.getElementById('status').innerText = "⏳ Minteando tu token...";
     
-    const tx = await contract.mint(
-      await signer.getAddress(),
-      CONFIG.tokenId,
-      1, // Cantidad
-      "0x" // Datos adicionales (vacío)
-    );
-    
-    document.getElementById("walletStatus").textContent = 
-      "⏳ Esperando confirmación...";
-    
+    // Mintear 1 token con ID 1
+    const tx = await contract.mint(await signer.getAddress(), 1, 1, "0x");
     await tx.wait();
-    await checkBalance();
     
-    button.textContent = "✅ Minteado!";
-    setTimeout(() => {
-      button.textContent = "🆕 Mintear Token Alma";
-      button.disabled = false;
-    }, 3000);
+    document.getElementById('status').innerHTML = `
+      <span class="text-success">✅ Token minteado con éxito!</span>
+      <small class="d-block">Transacción: ${tx.hash.substring(0, 10)}...</small>
+    `;
     
-  } catch(error) {
-    console.error("Error minteando:", error);
-    document.getElementById("walletStatus").textContent = 
-      `Error: ${error.message}`;
-    button.textContent = "🆕 Mintear Token Alma";
-    button.disabled = false;
+    // Actualizar información de tokens
+    await showTokenInfo();
+    
+  } catch (error) {
+    console.error("Error minteando token:", error);
+    document.getElementById('status').innerHTML = `
+      <span class="text-danger">❌ Error al mintear</span>
+      <small class="d-block">${error.message}</small>
+    `;
+  } finally {
+    document.getElementById('claimButton').disabled = false;
   }
 }
 
-async function checkBalance() {
+// Función para mostrar información de los tokens
+async function showTokenInfo() {
   try {
-    const balance = await contract.balanceOf(
-      await signer.getAddress(),
-      CONFIG.tokenId
-    );
+    const tokensInfo = document.getElementById('tokensInfo');
+    tokensInfo.style.display = "block";
     
-    const tokenInfo = document.getElementById("tokenInfo");
-    tokenInfo.innerHTML = `
-      <div class="alert alert-success">
-        <h4>Token Almas #${CONFIG.tokenId}</h4>
-        <p>Tienes: <strong>${balance}</strong> tokens</p>
-        <a href="${CONFIG.tokenURI}" target="_blank" class="btn btn-sm btn-outline-primary">
-          Ver Metadatos
-        </a>
-        <a href="https://sepolia.etherscan.io/address/${CONFIG.contractAddress}" 
-           target="_blank" class="btn btn-sm btn-outline-secondary ms-2">
-          Ver en Etherscan
-        </a>
-      </div>
-    `;
+    const balance = await contract.balanceOf(await signer.getAddress(), 1);
     
-  } catch(error) {
-    console.error("Error consultando balance:", error);
-    document.getElementById("tokenInfo").innerHTML = `
-      <div class="alert alert-danger">
-        Error al cargar balance: ${error.message}
-      </div>
+    tokensInfo.innerHTML = `
+      <h3>Tu Token Almas</h3>
+      <p>Tienes: <strong>${balance}</strong> tokens</p>
+      <a href="${TOKEN_URI}" target="_blank" class="btn btn-sm btn-outline-primary">
+        Ver metadatos del token
+      </a>
+      <a href="https://sepolia.etherscan.io/address/${CONTRACT_ADDRESS}" 
+         target="_blank" class="btn btn-sm btn-outline-secondary ms-2">
+        Ver contrato en Etherscan
+      </a>
     `;
+  } catch (error) {
+    console.error("Error mostrando info de tokens:", error);
   }
 }
