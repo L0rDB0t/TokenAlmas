@@ -1,28 +1,35 @@
 body {
-    font-family: sans-serif;
-    background: #121212;
-    color: white;
-    text-align: center;
-    padding: 2em;
-  }
-  
-  button {
-    padding: 1em 2em;
-    margin: 1em;
-    font-size: 1em;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #6c5ce7;
-    color: white;
-  }
-  
-  button:disabled {
-    background: gray;
-  }
-  
-  #status {
-    margin-top: 1em;
-    font-weight: bold;
-  }
-  
+  font-family: sans-serif;
+  background: #f7f7f7; /* Cambia el color de fondo */
+  color: #333; /* Cambia el color del texto a gris oscuro */
+  text-align: center;
+  padding: 2em;
+}
+
+button {
+  padding: 1em 2em;
+  margin: 1em;
+  font-size: 1em;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #6c5ce7;
+  color: white;
+}
+
+button:disabled {
+  background: gray;
+}
+
+#status {
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+#cornerImage {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 80px; /* Reduce el tamaño de la imagen */
+  height: auto;
+}

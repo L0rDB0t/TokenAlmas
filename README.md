@@ -52,7 +52,7 @@ Edit
 
 El proyecto está desplegado en GitHub Pages:
 
-https://L0RDB0T.github.io/lorddev-sft-dapp/
+https://github.com/L0rDB0t/TokenAlmas.git
 
 yaml
 Copy
