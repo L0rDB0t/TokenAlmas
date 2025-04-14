@@ -1,19 +1,10 @@
 {
-  "name": "Token Almas",
-  "description": "Token SFT exclusivo de Almas en la blockchain",
-  "image": "https://l0rdb0t.github.io/TokenAlmas/images/lorddev.jpg",
-  "attributes": [
-      {
-          "trait_type": "Tipo",
-          "value": "Alma Digital"
-      },
-      {
-          "trait_type": "Blockchain",
-          "value": "Ethereum"
-      },
-      {
-          "trait_type": "Red",
-          "value": "Sepolia Testnet"
-      }
-  ]
+    "name": "Token Almas",
+    "description": "Token SFT representando un Alma Digital en la blockchain",
+    "image": "imagenes/lorddev.jpg",
+    "attributes": [
+        {"trait_type": "Tipo", "value": "Alma Digital"},
+        {"trait_type": "Rareza", "value": "Única"},
+        {"trait_type": "Blockchain", "value": "Ethereum Sepolia"}
+    ]
 }

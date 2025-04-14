@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Token Almas SFT</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    #tokenCard { border: 1px solid #ddd; padding: 20px; margin-top: 20px; }
+  </style>
 </head>
 <body>
-    <main>
-      <h1>Token Almas SFT</h1>
-      <p>Conéctate con Metamask para gestionar tus tokens en Sepolia Testnet.</p>
-      <button id="connectButton">🔌 Conectar Wallet</button>
-      <div id="tokenInterface" style="display:none;">
-        <button id="mintButton">🆕 Mintear Token</button>
-        <button id="viewTokens">👀 Ver Mis Tokens</button>
-      </div>
-      <p id="status"></p>
-      <div id="tokensContainer"></div>
-    </main>
-    <img src="imagenes/lorddev.jpg" alt="Ojos" id="cornerImage" />
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
-    <script src="app.js"></script>
+  <h1>Token Almas SFT</h1>
+  <div id="walletSection">
+    <button id="connectButton">🔌 Conectar Wallet</button>
+    <span id="walletStatus">No conectado</span>
+  </div>
+  
+  <div id="tokenSection" style="display:none;">
+    <button id="mintButton">🆕 Mintear Token Alma</button>
+    <button id="checkBalance">👀 Ver mi Balance</button>
+    <div id="tokenInfo"></div>
+  </div>
+
+  <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
