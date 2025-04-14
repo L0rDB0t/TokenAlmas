@@ -1,4 +1,4 @@
-# 🧙‍♂️ LordDev SFT DApp
+# LordDev SFT DApp
 
 Esta es una DApp en la red **Sepolia Testnet** que permite a los usuarios reclamar un token SFT (ERC-1155) llamado **AlmasToken**.
 
