@@ -3,6 +3,8 @@
 Esta es una DApp en la red **Sepolia Testnet** que permite a los usuarios reclamar un token SFT (ERC-1155) llamado **AlmasToken**.
 
 ---
+## Contrato
+address: 0x20ae870f101b578917fec53d4e98ef0abe0df6fc
 
 ## 🚀 Funcionalidades
 
