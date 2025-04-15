@@ -39,165 +39,97 @@
   
   <!-- Nuestro JavaScript embebido para evitar errores 404 -->
   <script>
-    // Debug inicial
-    console.log("Iniciando aplicación...");
-    document.getElementById('status').textContent = "Cargando aplicación...";
+    // ... (código anterior permanece igual)
 
-    // Configuración
-    const CONTRACT_ADDRESS = "0x20ae870f101b578917fec53d4e98ef0abe0df6fc";
-    const ABI = [
-      {
-        "inputs": [
-          {"internalType":"address","name":"account","type":"address"},
-          {"internalType":"uint256","name":"id","type":"uint256"},
-          {"internalType":"uint256","name":"amount","type":"uint256"},
-          {"internalType":"bytes","name":"data","type":"bytes"}
-        ],
-        "name":"mint",
-        "outputs":[],
-        "stateMutability":"nonpayable",
-        "type":"function"
-      }
-    ];
+// Configuración adicional
+const TOKEN_ID = 1; // ID de tu token SFT
+const TOKEN_AMOUNT = 1; // Cantidad a mintear
 
-    // 1. Verificar MetaMask al cargar la página
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log("DOM completamente cargado");
-      
-      if (typeof window.ethereum === 'undefined') {
-        showError("❌ MetaMask no detectado. Instala la extensión para continuar.");
-        document.getElementById("connectButton").disabled = true;
-        return;
-      }
-      
-      console.log("MetaMask detectado:", window.ethereum);
-      setupEventListeners();
-    });
+// 5. Configurar el botón de reclamar token
+document.addEventListener('DOMContentLoaded', () => {
+  // ... (código anterior permanece igual)
+  
+  // Añadir este listener para el botón de reclamar
+  document.getElementById('claimButton').addEventListener('click', mintToken);
+});
 
-    // 2. Configurar listeners de eventos
-    function setupEventListeners() {
-      console.log("Configurando event listeners...");
-      
-      document.getElementById('connectButton').addEventListener('click', async () => {
-        console.log("Botón Conectar clickeado");
-        await handleWalletConnection();
-      });
+// 6. Función para mintear tokens
+async function mintToken() {
+  const claimButton = document.getElementById('claimButton');
+  const statusElement = document.getElementById('status');
+  
+  try {
+    console.log("Iniciando minteo de token...");
+    claimButton.disabled = true;
+    statusElement.innerHTML = `
+      <div class="d-flex align-items-center">
+        <div class="spinner-border spinner-border-sm me-2" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <span>Preparando transacción...</span>
+      </div>
+    `;
+    
+    // Obtener el signer actual
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+    
+    // Ejecutar el minteo
+    const tx = await contract.mint(
+      await signer.getAddress(), // Dirección del receptor
+      TOKEN_ID,                 // ID del token
+      TOKEN_AMOUNT,             // Cantidad
+      "0x"                      // Datos adicionales (vacío)
+    );
+    
+    statusElement.innerHTML = `
+      <div class="text-warning">
+        ⏳ Transacción enviada. Esperando confirmación...
+        <div class="small">TX: ${tx.hash.substring(0, 10)}...</div>
+      </div>
+    `;
+    
+    // Esperar confirmación
+    const receipt = await tx.wait();
+    console.log("Transacción confirmada:", receipt);
+    
+    // Mostrar éxito
+    statusElement.innerHTML = `
+      <div class="text-success">
+        ✅ Token reclamado exitosamente!
+        <div class="small">
+          <a href="https://sepolia.etherscan.io/tx/${tx.hash}" target="_blank">
+            Ver en Etherscan
+          </a>
+        </div>
+      </div>
+    `;
+    
+    // Resetear botón después de 3 segundos
+    setTimeout(() => {
+      claimButton.textContent = "🎁 Token Reclamado";
+    }, 3000);
+    
+  } catch (error) {
+    console.error("Error al reclamar token:", error);
+    
+    let errorMessage = error.message;
+    if (error.data?.message) {
+      errorMessage = error.data.message;
     }
+    
+    statusElement.innerHTML = `
+      <div class="text-danger">
+        ❌ Error al reclamar token
+        <div class="small">${errorMessage}</div>
+      </div>
+    `;
+    
+    claimButton.disabled = false;
+  }
+}
 
-    // 3. Manejar conexión de wallet
-    async function handleWalletConnection() {
-      const connectButton = document.getElementById('connectButton');
-      const statusElement = document.getElementById('status');
-      
-      try {
-        console.log("Iniciando conexión...");
-        statusElement.textContent = "Conectando a MetaMask...";
-        connectButton.disabled = true;
-        
-        // Solicitar conexión de cuentas
-        const accounts = await window.ethereum.request({ 
-          method: "eth_requestAccounts" 
-        });
-        
-        console.log("Cuentas recibidas:", accounts);
-        
-        // Verificar red (Sepolia Testnet)
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        console.log("ChainID actual:", chainId);
-        
-        if (chainId !== "0xaa36a7") {
-          await switchToSepolia();
-          return;
-        }
-        
-        // Configurar ethers.js
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        
-        console.log("Conexión exitosa. Dirección:", address);
-        
-        // Actualizar UI
-        statusElement.innerHTML = `
-          <span class="text-success">✅ Conectado correctamente</span>
-          <p class="small mb-0">${address.substring(0, 6)}...${address.substring(38)}</p>
-        `;
-        connectButton.textContent = "✅ Conectado";
-        connectButton.classList.remove('btn-primary');
-        connectButton.classList.add('btn-success');
-        
-        // Habilitar funcionalidad adicional
-        document.getElementById("claimButton").disabled = false;
-        
-      } catch (error) {
-        console.error("Error en conexión:", error);
-        showError(`Error de conexión: ${error.message}`);
-        connectButton.disabled = false;
-      }
-    }
-
-    // 4. Cambiar a Sepolia Testnet
-    async function switchToSepolia() {
-      const statusElement = document.getElementById('status');
-      
-      try {
-        console.log("Intentando cambiar a Sepolia...");
-        statusElement.textContent = "Cambiando a Sepolia Testnet...";
-        
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0xaa36a7" }] // Sepolia
-        });
-        
-        console.log("Cambio a Sepolia exitoso");
-        await handleWalletConnection();
-        
-      } catch (error) {
-        console.error("Error cambiando de red:", error);
-        
-        if (error.code === 4902) {
-          try {
-            await window.ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [{
-                chainId: "0xaa36a7",
-                chainName: "Sepolia Test Network",
-                nativeCurrency: {
-                  name: "Sepolia ETH",
-                  symbol: "ETH",
-                  decimals: 18
-                },
-                rpcUrls: ["https://rpc.sepolia.org"],
-                blockExplorerUrls: ["https://sepolia.etherscan.io"]
-              }]
-            });
-            await switchToSepolia();
-          } catch (addError) {
-            console.error("Error añadiendo red Sepolia:", addError);
-            showError("Por favor cambia manualmente a Sepolia Testnet en MetaMask");
-          }
-        }
-      }
-    }
-
-    function showError(message) {
-      const statusElement = document.getElementById('status');
-      statusElement.innerHTML = `
-        <span class="text-danger">❌ ${message}</span>
-      `;
-      statusElement.classList.remove('alert-info');
-      statusElement.classList.add('alert-danger');
-    }
-
-    // Función para mostrar mensaje de éxito
-    function showSuccess(message) {
-      const statusElement = document.getElementById('status');
-      statusElement.innerHTML = `
-        <span class="text-success">✅ ${message}</span>
-      `;
-      statusElement.classList.remove('alert-danger');
-      statusElement.classList.add('alert-success');
-    }
   </script>
 </body>
 </html>
