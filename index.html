@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Reclama tu Almas</title>
-  <link rel="stylesheet" href="style.css" />
-  <!-- Añadimos ethers.js para conexión blockchain -->
-  <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
-  <!-- Añadimos Bootstrap para mejor UI (opcional) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token Almas SFT</title>
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Ethers.js -->
+  <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+  <style>
+    #status { min-height: 60px; }
+    #cornerImage { position: fixed; bottom: 20px; right: 20px; max-width: 150px; }
+  </style>
 </head>
-<body>
-    <main>
-      <h1> Reclama Almas</h1>
-      <p>Conéctate con Metamask y reclama tu SFT exclusivo en Sepolia Testnet.</p>
-      
-      <!-- Botones originales mantenidos -->
-      <button id="connectButton" class="btn btn-primary">🔌 Conectar Wallet</button>
-      <button id="claimButton" class="btn btn-success" disabled>🎁 Reclamar Token</button>
-      
-      <p id="status" class="mt-3"></p>
-      
-      <!-- Añadimos sección para mostrar tokens (oculta inicialmente) -->
-      <div id="tokensInfo" style="display:none;" class="mt-4 p-3 bg-light rounded"></div>
-    </main>
-    <img src="imagenes/lorddev.jpg" alt="Ojos" id="cornerImage" />
-    
-    <!-- Nuestro archivo JavaScript -->
-    <script src="app.js"></script>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+          <div class="card-body text-center">
+            <h1 class="card-title mb-4">Token Almas SFT</h1>
+            <img src="imagenes/lorddev.jpg" class="img-fluid rounded mb-4" style="max-height: 200px;">
+            
+            <!-- Botones originales mantenidos -->
+            <button id="connectButton" class="btn btn-primary btn-lg mb-3">
+              🔌 Conectar Wallet
+            </button>
+            <button id="claimButton" class="btn btn-success btn-lg mb-3" disabled>
+              🎁 Reclamar Token
+            </button>
+            
+            <!-- Área de estado -->
+            <div id="status" class="alert alert-info"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
 </body>
 </html>
