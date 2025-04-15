@@ -1,5 +1,5 @@
-Token Almas SFT - Documentación Completa
-Token Almas SFT
+# Token Almas SFT - Documentación Completa
+# Token Almas SFT
 
 📌 Descripción
 Token Almas es un proyecto de token semi-fungible (SFT) implementado como un contrato inteligente en la red de prueba Sepolia de Ethereum. Este repositorio incluye:
