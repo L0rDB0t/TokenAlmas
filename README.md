@@ -1,8 +1,10 @@
-# 🧙‍♂️ LordDev SFT DApp
+# LordDev SFT DApp
 
 Esta es una DApp en la red **Sepolia Testnet** que permite a los usuarios reclamar un token SFT (ERC-1155) llamado **AlmasToken**.
 
 ---
+## Contrato
+address: 0x20ae870f101b578917fec53d4e98ef0abe0df6fc
 
 ## 🚀 Funcionalidades
 
@@ -50,10 +52,9 @@ Edit
 
 ## 📦 Deployment
 
-El proyecto está desplegado en GitHub Pages:
+El proyecto está desplegado en Vercel Pages:
 
-https://github.com/L0rDB0t/TokenAlmas.git
-
+https://token-almas-3wchpgfkn-l0rdb0ts-projects.vercel.app/
 yaml
 Copy
 Edit
