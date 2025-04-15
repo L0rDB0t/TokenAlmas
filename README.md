@@ -1,82 +1,137 @@
-# LordDev SFT DApp
+Token Almas SFT - Documentación Completa
+Token Almas SFT
 
-Esta es una DApp en la red **Sepolia Testnet** que permite a los usuarios reclamar un token SFT (ERC-1155) llamado **AlmasToken**.
+📌 Descripción
+Token Almas es un proyecto de token semi-fungible (SFT) implementado como un contrato inteligente en la red de prueba Sepolia de Ethereum. Este repositorio incluye:
 
----
-## Contrato
-address: 0x20ae870f101b578917fec53d4e98ef0abe0df6fc
+Contrato inteligente MultiSig para tokens ERC1155
 
-## 🚀 Funcionalidades
+Interfaz web para conectar wallets y reclamar tokens
 
-- Conexión con MetaMask
-- Reclamo único de un token SFT exclusivo
-- Interfaz simple y directa
-- Desplegado con GitHub Pages
+Metadatos estándar para visualización en marketplaces
 
----
+🔧 Tecnologías Utilizadas
+Blockchain: Ethereum Sepolia Testnet
 
-## 🧱 Estructura
+Contrato Inteligente: Solidity (ERC1155)
 
-lorddev-sft-dapp/ ├── index.html → Página principal ├── js/ │ └── app.js → Lógica de conexión y reclamo ├── style.css → Estilos básicos ├── metadata/ │ └── 1.json → Metadata del token LordDev ├── images/ │ └── lorddev.png → Imagen del token └── README.md → Este archivo
+Frontend: HTML, CSS, JavaScript
 
-yaml
+Librerías: Ethers.js, Bootstrap
+
+Hosting: Vercel (alternativas: GitHub Pages, Netlify)
+
+🚀 Instalación y Despliegue
+Opción 1: Desplegar en Vercel (Recomendado)
+Haz fork de este repositorio
+
+Crea una cuenta en Vercel
+
+Conecta tu cuenta de GitHub
+
+Selecciona este repositorio para desplegar
+
+Configura las opciones:
+
+Framework: Static
+
+Build Command: (dejar vacío)
+
+Output Directory: .
+
+Haz clic en Deploy
+
+Opción 2: Ejecución Local
+bash
 Copy
-Edit
+# Clona el repositorio
+git clone https://github.com/tu-usuario/token-almas.git
 
----
+# Entra al directorio
+cd token-almas
 
-## ⚙️ Cómo usar
+# Sirve la aplicación localmente (necesitas Python)
+python3 -m http.server 8000
+Abre tu navegador en: [http://localhost:8000](https://token-almas.vercel.app/)
 
-1. Conectá tu wallet (MetaMask) a la red **Sepolia Testnet**
-2. Visitá la página desplegada
-3. Hacé clic en **"Conectar Wallet"**
-4. Luego hacé clic en **"Reclamar Token"**
+📝 Guía de Uso
+Para Usuarios
+Conectar Wallet:
 
-> 🔒 Solo se puede reclamar **una vez por dirección**.
+Haz clic en "🔌 Conectar Wallet"
 
----
+Acepta la conexión en MetaMask
 
-## ✨ Información del Token
+Asegúrate de estar en Sepolia Testnet
 
-| Campo       | Valor                                                          |
-|-------------|----------------------------------------------------------------|
-| Nombre      | AlmasToken                                                        |
-| Token ID    | `1`                                                            |
-| Tipo        | SFT (ERC-1155)                                                 |
-| Metadata    | [`metadata/1.json`](./metadata/1.json)                         |
-| Imagen      | `images/lorddev.png`                                           |
-| Red         | Sepolia Testnet                                                |
-| Contrato    | `Aún no desplegado` (se actualizará luego del despliegue)     |
+Reclamar Token:
 
----
+Haz clic en "🎁 Reclamar Token"
 
-## 📦 Deployment
+Confirma la transacción en MetaMask
 
-El proyecto está desplegado en Vercel Pages:
+Espera la confirmación (puede tomar unos segundos)
 
-https://token-almas-3wchpgfkn-l0rdb0ts-projects.vercel.app/
-yaml
+Verificar Token:
+
+Puedes ver tu token en:
+
+Sepolia Etherscan
+
+OpenSea Testnet (si está configurado)
+
+Para Desarrolladores
+Estructura de Archivos:
+
 Copy
-Edit
+token-almas/
+├── index.html          # Interfaz principal
+├── imagenes/           # Assets visuales
+│   └── lorddev.jpg     # Imagen del token
+├── 1.json              # Metadatos del token
+└── README.md           # Este archivo
+Variables de Configuración:
 
----
+CONTRACT_ADDRESS: Dirección del contrato desplegado
 
-## ⛓ Integración con el Smart Contract
+TOKEN_ID: ID del token SFT
 
-La dirección del contrato y el ABI serán integrados en el archivo `app.js` una vez el contrato esté desplegado. El método `claim()` permite a los usuarios reclamar su token SFT.
+ABI: Interfaz del contrato para interactuar
 
----
+🔗 Enlaces Importantes
+Contrato en Sepolia Etherscan: Ver contrato
 
-## 🛠 Tecnologías
+Sitio Desplegado: Token Almas en Vercel
 
-- HTML, CSS, JavaScript
-- Ethers.js
-- MetaMask
-- GitHub Pages
-- Sepolia Testnet
+Documentación ERC1155: OpenZeppelin
 
----
+🤝 Contribución
+Si deseas contribuir al proyecto:
 
-## 📜 Licencia
+Haz fork del repositorio
 
-MIT License
+Crea una rama con tu feature (git checkout -b feature/mejora)
+
+Haz commit de tus cambios (git commit -am 'Añade alguna mejora')
+
+Haz push a la rama (git push origin feature/mejora)
+
+Abre un Pull Request
+
+⚠️ Troubleshooting
+Problema: El botón "Conectar Wallet" no hace nada
+
+Solución: Verifica que MetaMask esté instalado y no bloqueado por extensiones
+
+Problema: Transacción falla con "out of gas"
+
+Solución: Consigue ETH de prueba de un faucet de Sepolia
+
+Problema: Error 404 al cargar recursos
+
+Solución: Verifica las rutas de los archivos en tu despliegue
+
+📜 Licencia
+Este proyecto está bajo licencia MIT. Ver archivo LICENSE para más detalles.
+
+Nota: Este proyecto está configurado para la red de prueba Sepolia. No utilices fondos reales.
